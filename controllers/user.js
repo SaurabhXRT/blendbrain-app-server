@@ -106,5 +106,86 @@ router.get("/posts", async (req, res) => {
   }
 });
 
+router.post('/comment/:postId', async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.userId;
+    const { text } = req.body;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const comment = {
+      text,
+      createdBy: userId,
+    };
+
+    post.comments.push(comment);
+    await post.save();
+
+    res.json({ message: 'Comment added successfully' });
+  } catch (error) {
+    console.error('Error commenting on post:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/like/:postId', async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.userId;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    const alreadyLikedIndex = post.likes.findIndex((id) => id.equals(userId));
+
+    if (alreadyLikedIndex !== -1) {
+      post.likes.splice(alreadyLikedIndex, 1);
+    } else {
+      post.likes.push(userId);
+    }
+
+    await post.save();
+
+    res.json({ message: 'Post like updated successfully' });
+  } catch (error) {
+    console.error('Error updating post like:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/comments/:postId', async (req, res) => {
+  try {
+    const postId = req.params.postId;
+
+    const post = await Post.findById(postId).populate({
+      path: 'comments.createdBy',
+      select: 'name profileImage',
+    });
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const comments = post.comments.map((comment) => ({
+      text: comment.text,
+      createdBy: {
+        name: comment.createdBy.name,
+        profileImage: comment.createdBy.profileImage,
+      },
+      createdAt: comment.createdAt,
+    }));
+
+    res.json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 module.exports = router;
