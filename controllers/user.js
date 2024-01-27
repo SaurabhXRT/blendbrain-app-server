@@ -51,7 +51,7 @@ router.get('/fetch-user', async (req, res) => {
 
 router.post('/posts',uploads.single('image'), async (req, res) => {
   try {
-    const text = req.body.text || 'no caption';
+    const text = req.body.text;
     const userId = req.userId;
     const user = await User.findById(userId);
     if (!user) {
