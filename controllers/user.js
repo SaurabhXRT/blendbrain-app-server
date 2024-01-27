@@ -80,4 +80,31 @@ router.post('/posts',uploads.single('image'), async (req, res) => {
   }
 });
 
+router.get("/posts", async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+    const connectedUsers = user.connections;
+    const feedPosts = await Post.find({ createdBy: { $in: connectedUsers } })
+      .sort({ createdAt: -1 })
+      .populate("createdBy");
+
+    const userPosts = await Post.find({  createdBy: user._id })
+      .sort({ createdAt: -1 })
+      .populate("createdBy");
+    const combinedFeed = [...feedPosts, ...userPosts].map((post) => ({
+      ...post.toObject(),
+    }));
+    combinedFeed.sort((a, b) => b.createdAt - a.createdAt);
+    res.json(combinedFeed);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+
 module.exports = router;
