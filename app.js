@@ -26,7 +26,8 @@ db();
 app.get("/", (req,res) => {
     res.send("server is working");
 });
-
+const userRoutes = require('./controllers/user');
+app.use('/user', userRoutes);
 
 const authRoutes = require('./controllers/auth');
 app.use('/auth', authRoutes);
