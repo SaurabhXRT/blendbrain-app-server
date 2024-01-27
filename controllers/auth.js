@@ -17,12 +17,12 @@ router.post("/login", async (req, res) => {
         if (!existinguser) {
             const user = new User({mobileNumber});
             await user.save();
-            const token = jwt.sign({ id: user._id }, SecretKey, { expiresIn: '7d' });
+            const token = jwt.sign({ userId: user._id }, SecretKey, { expiresIn: '7d' });
             res.json({ token });
         } else {
             existinguser.mobileNumber = mobileNumber;
             await  existinguser.save();
-            const token = jwt.sign({ id:  existinguser._id }, SecretKey, { expiresIn: '7d' });
+            const token = jwt.sign({  userId:  existinguser._id }, SecretKey, { expiresIn: '7d' });
             res.json({ token });
         }
     
