@@ -49,7 +49,7 @@ router.get('/fetch-user', async (req, res) => {
   }
 });
 
-router.get('/fetch-non-user', async (req, res) => {
+router.get('/fetch-non-connected-user', async (req, res) => {
   try {
     const userId = req.userId; 
     const user = await User.findById(userId);
@@ -57,6 +57,7 @@ router.get('/fetch-non-user', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+     const connectedUsers = user.connections;
      const excludedUserIds = connectedUsers.concat(
       user._id,
       user.pendingConnections,
