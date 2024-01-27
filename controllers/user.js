@@ -70,10 +70,7 @@ router.get('/fetch-non-connected-user', async (req, res) => {
       }
     });
     console.log(nonConnectedUsers);
-    res.json({
-       mobileNumber: nonConnectedUsers.mobileNumber, 
-      profileImage: nonConnectedUsers.profileImage,                  
-    });
+    res.json(nonConnectedUsers);
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({ error: 'Internal Server Error' });
