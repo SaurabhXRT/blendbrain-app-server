@@ -69,6 +69,7 @@ router.get('/fetch-non-connected-user', async (req, res) => {
         $nin: excludedUserIds,
       }
     });
+    console.log(nonConnectedUsers);
     res.json({
        mobileNumber: nonConnectedUsers.mobileNumber, 
       profileImage: nonConnectedUsers.profileImage,                  
