@@ -33,14 +33,14 @@ router.use(authMiddleware);
 
 router.get('/fetch-user', async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.userId; 
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
     res.json({
-      mobileNumber: user.mobile,
+      mobileNumber: user.mobileNumber, 
       profileImage: user.profileImage,
     });
   } catch (error) {
