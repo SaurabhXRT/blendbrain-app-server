@@ -23,6 +23,10 @@ const db = async () => {
     }
 }
 db();
+app.get("/", (req,res) => {
+    res.send("server is working");
+});
+
 
 const authRoutes = require('./controllers/auth');
 app.use('/auth', authRoutes);
