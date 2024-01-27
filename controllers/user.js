@@ -49,4 +49,35 @@ router.get('/fetch-user', async (req, res) => {
   }
 });
 
+router.post('/posts',uploads.single('image'), async (req, res) => {
+  try {
+    const text = req.body.text || 'no caption';
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const createdBy = userId;
+    let image;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      image = result.secure_url;
+    }
+
+    const post = new Post({
+      text,
+      image,
+      createdBy 
+    });
+    await post.save();
+    await user.posts.push(post._id);
+    await user.save();
+
+    res.json(post);
+  } catch (error) {
+    console.error('Error creating post:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
