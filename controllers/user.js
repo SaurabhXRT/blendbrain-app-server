@@ -222,17 +222,13 @@ router.post("/connect/:userId", async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
     if (currentUser.connections.includes(userIdToConnect)) {
-      return res.status(400).json({ message: "Already connected." });
+      return res.json({ message: "Already connected." });
     }
     if (currentUser.pendingConnections.includes(userToConnect._id)) {
-      return res
-        .status(400)
-        .json({ message: "Already in pending connection." });
+      return res.json({ message: "Already in pending connection." });
     }
     if (currentUser.sentConnections.includes(userToConnect._id)) {
-      return res
-        .status(400)
-        .json({ message: " you have already sent the connection request." });
+      return res.json({ message: " you have already sent the connection request." });
     }
     currentUser.sentConnections.push(userIdToConnect);
     await currentUser.save();
