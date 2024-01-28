@@ -295,5 +295,18 @@ router.put('/updateprofile',uploads.single('profileImage'), async (req, res) => 
   }
 });
 
+router.delete('/posts/:postId', async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.userId; 
+  try {
+    const post = await Post.findById(postId);
+    await post.deleteOne();
+    res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 module.exports = router;
