@@ -65,7 +65,7 @@ router.get('/fetch-non-connected-user', async (req, res) => {
       _id: {
         $nin: excludedUserIds,
       }
-    });
+    }).sort({ createdAt: -1 });
     console.log(nonConnectedUsers);
     res.json(nonConnectedUsers);
   } catch (error) {
