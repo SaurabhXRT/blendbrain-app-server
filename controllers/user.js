@@ -215,7 +215,7 @@ router.get('/comments/:postId', async (req, res) => {
 router.post("/connect/:userId", async (req, res) => {
   try {
     const userId = req.userId;
-    const currentUser = await User.findOne(userId);
+    const currentUser = await User.findById(userId);
     const userIdToConnect = req.params.userId; 
     const userToConnect = await User.findById(userIdToConnect);
     if (!userToConnect) {
