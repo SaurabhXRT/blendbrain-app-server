@@ -212,5 +212,32 @@ router.get('/comments/:postId', async (req, res) => {
   }
 });
 
+router.post("/connect/:userId", checkAuth, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const currentUser = await User.findOne(userId);
+    const userIdToConnect = req.params.userId; 
+    const userToConnect = await User.findById(userIdToConnect);
+    if (!userToConnect) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    if (currentUser.connections.includes(userIdToConnect)) {
+      return res.status(400).json({ message: "Already connected." });
+    }
+    if (currentUser.pendingConnections.includes(userToConnect._id)) {
+      return res
+        .status(400)
+        .json({ message: "Already in pending connection." });
+    }
+    currentUser.sentConnections.push(userIdToConnect);
+    await currentUser.save();
+    userToConnect.pendingConnections.push(currentUser._id);
+    await userToConnect.save();
+    res.json({ message: "Connection request sent." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error connecting to the user." });
+  }
+});
 
 module.exports = router;
