@@ -39,10 +39,7 @@ router.get('/fetch-user', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json({
-      mobileNumber: user.mobileNumber, 
-      profileImage: user.profileImage,
-    });
+    res.json(user);
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({ error: 'Internal Server Error' });
