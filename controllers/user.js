@@ -229,6 +229,11 @@ router.post("/connect/:userId", async (req, res) => {
         .status(400)
         .json({ message: "Already in pending connection." });
     }
+    if (currentUser.sentConnections.includes(userToConnect._id)) {
+      return res
+        .status(400)
+        .json({ message: " you have already sent the connection request." });
+    }
     currentUser.sentConnections.push(userIdToConnect);
     await currentUser.save();
     userToConnect.pendingConnections.push(currentUser._id);
