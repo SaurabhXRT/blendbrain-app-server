@@ -11,9 +11,20 @@ const userSchema = new mongoose.Schema({
     required: true,
   
   },
-  password: {
+   name: {
     type: String,
- 
+  },
+  college: {
+    type: String,
+  },
+  year: {
+    type: Number,
+  },
+  branch: {
+    type: String,
+  },
+  bio: {
+    type: String,
   },
   isVerified: {
     type: Boolean,
