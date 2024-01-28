@@ -212,7 +212,7 @@ router.get('/comments/:postId', async (req, res) => {
   }
 });
 
-router.post("/connect/:userId", checkAuth, async (req, res) => {
+router.post("/connect/:userId", async (req, res) => {
   try {
     const userId = req.userId;
     const currentUser = await User.findOne(userId);
