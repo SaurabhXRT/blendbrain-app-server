@@ -324,7 +324,36 @@ router.get('/fetch-user-connections', async (req, res) => {
     const pendingConnectionUsers = await User.find({ _id: { $in: pendingConnectionUsersIds }});
     res.json({ connectedUsers, pendingConnectionUsers });
   } catch (error) {
-    console.error('Error deleting post:', error);
+    console.error('Error fetching con nections:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/accept-conection-request/:usertoacceptId', async (req, res) => {
+  try {
+    const userId = req.userId; 
+    const currentUser  = await User.findById(userId);
+    const userIdToAccept = req.params.usertoacceptId;
+    const userToAccept = await User.findById(userIdToAccept);
+     if (!userToAccept) {
+      return res.status(404).json({ message: "User to accept not found." });
+    }
+    if (!currentUser.pendingConnections.includes(userToAccept._id)) {
+      return res.status(400).json({ message: "Connection request not found." });
+    }
+    currentUser.connections.push(userToAccept._id);
+    userToAccept.connections.push(currentUser._id);
+    currentUser.pendingConnections = currentUser.pendingConnections.filter(
+      (id) => id.toString() !== userToAccept._id.toString()
+    );
+    userToAccept.sentConnections =  userToAccept.sentConnections.filter(
+      (id) => id.toString() !== currentUser._id.toString()
+    );
+    await currentUser.save();
+    await userToAccept.save();
+    res.json({ message: "Connection accepted." });
+  } catch (error) {
+    console.error('Error accepting request:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
