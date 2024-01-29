@@ -314,7 +314,7 @@ router.get('/fetch-user-connections', async (req, res) => {
     const userProfile = await User.findById(userId)
       .populate("pendingConnections")
       .populate("connections");
-    if (!user) {
+    if (!userProfile) {
       return res.status(404).json({ error: 'User not found' });
     }
 
