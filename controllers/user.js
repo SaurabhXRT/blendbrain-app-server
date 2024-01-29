@@ -308,5 +308,26 @@ router.delete('/posts/:postId', async (req, res) => {
   }
 });
 
+router.get('/fetch-user-connections', async (req, res) => {
+  try {
+    const userId = req.userId; 
+    const userProfile = await User.findById(userId)
+      .populate("pendingConnections")
+      .populate("connections");
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const connectedUserIds = userProfile.connections;
+    const connectedUsers = await User.find({ _id: { $in: connectedUserIds } });
+    const pendingConnectionUsersIds = userProfile.pendingConnections;
+    const pendingConnectionUsers = await User.find({ _id: { $in: pendingConnectionUsersIds }});
+    res.json({ connectedUsers, pendingConnectionUsers });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 module.exports = router;
