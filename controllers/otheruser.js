@@ -51,9 +51,6 @@ router.get('/check-connection/:otheruserId', async (req, res) => {
     else if(connectionsent){
       res.json({connectionsent});
     }
-    else {
-       res.json({isnotconnected});
-    }
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({ error: 'Internal Server Error' });
