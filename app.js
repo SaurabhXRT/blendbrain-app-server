@@ -24,7 +24,7 @@ const db = async () => {
 }
 db();
 app.get("/", (req,res) => {
-    res.send("server is working");
+    res.send("server is running");
 });
 const userRoutes = require('./controllers/user');
 app.use('/user', userRoutes);
