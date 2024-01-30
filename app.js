@@ -31,6 +31,10 @@ app.use('/user', userRoutes);
 
 const authRoutes = require('./controllers/auth');
 app.use('/auth', authRoutes);
+
+const otheruserRoutes = require('./controllers/otheruser');
+app.use('/otheruser', otheruserRoutes);
+
 const port = 3000;
 app.listen(port, () => {
     console.log(`app is running at port number ${port}`);
