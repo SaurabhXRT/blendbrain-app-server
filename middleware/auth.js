@@ -33,7 +33,7 @@ const authMiddleware = async (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
-        res.status(401).json({ error: 'Please authenticate' });
+        res.status(401).json({ error: 'bhaag bsdk' });
     }
 };
 
