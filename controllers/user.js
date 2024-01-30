@@ -312,7 +312,6 @@ router.get('/fetch-user-connections', async (req, res) => {
   try {
     const userId = req.userId; 
     const userProfile = await User.findById(userId)
-      .populate("pendingConnections")
       .populate("connections");
     if (!userProfile) {
       return res.status(404).json({ error: 'User not found' });
@@ -320,9 +319,24 @@ router.get('/fetch-user-connections', async (req, res) => {
 
     const connectedUserIds = userProfile.connections;
     const connectedUsers = await User.find({ _id: { $in: connectedUserIds } });
+    res.json(connectedUsers);
+  } catch (error) {
+    console.error('Error fetching con nections:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/fetch-user-pendingconnections', async (req, res) => {
+  try {
+    const userId = req.userId; 
+    const userProfile = await User.findById(userId)
+      .populate("pendingConnections");
+    if (!userProfile) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     const pendingConnectionUsersIds = userProfile.pendingConnections;
     const pendingConnectionUsers = await User.find({ _id: { $in: pendingConnectionUsersIds }});
-    res.json({ connectedUsers, pendingConnectionUsers });
+    res.json(pendingConnectionUsers);
   } catch (error) {
     console.error('Error fetching con nections:', error);
     res.status(500).json({ error: 'Internal Server Error' });
