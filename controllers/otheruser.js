@@ -46,4 +46,22 @@ router.get('/fetch-user', async (req, res) => {
   }
 });
 
+router.get("/profile/posts", async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+  
+    const Posts = await Post.find({ createdBy: userId })
+      .sort({ createdAt: -1 })
+      .populate("createdBy");
+    res.json(Posts);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
 module.exports = router;
