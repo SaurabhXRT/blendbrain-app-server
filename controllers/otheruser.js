@@ -33,7 +33,7 @@ router.use(authMiddleware);
 
 router.get('/fetch-user/:otheruserId', async (req, res) => {
   try {
-    const userId = req.userId; 
+    const userId = req.params.otheruserId;      
     const user = await User.findById(userId);
 
     if (!user) {
@@ -48,7 +48,7 @@ router.get('/fetch-user/:otheruserId', async (req, res) => {
 
 router.get("/posts/:otheruserId", async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.params.otheruserId;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found.");
@@ -66,7 +66,7 @@ router.get("/posts/:otheruserId", async (req, res) => {
 
 router.get('/fetch-user-connections/:otheruserId', async (req, res) => {
   try {
-    const userId = req.userId; 
+    const userId = req.params.otheruserId;
     const userProfile = await User.findById(userId)
       .populate("pendingConnections")
       .populate("connections");
