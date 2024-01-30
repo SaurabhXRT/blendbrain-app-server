@@ -45,7 +45,8 @@ router.get('/check-connection/:otheruserId', async (req, res) => {
     }
     const isconnected = user.connections.includes(userIdtocheck);
     const connectionsent = user.sentConnections.includes(userIdtocheck);
-    res.json({isconnected,connectionsent});
+    const inmypendingconnection = user.pendingConnections.includes(userIdtocheck);
+    res.json({isconnected,connectionsent,inmypendingconnection});
 
   } catch (error) {
     console.error('Error fetching user profile:', error);
