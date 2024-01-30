@@ -286,11 +286,11 @@ router.put('/updateprofile',uploads.single('profileImage'), async (req, res) => 
      //  user.profileImage = result.secure_url || user.profileImage;
      // // fs.unlinkSync(req.file.path);
     user.profileImage = profileimage || user.profileImage;
-    
+    user.isVerified = true;
     await user.save();
     res.json(user);
   } catch (error) {
-    console.error('Error updating user profile:', error);
+    console.error('Error creating user profile', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
