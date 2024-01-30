@@ -44,9 +44,14 @@ router.get('/check-connection/:otheruserId', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     const isconnected = user.connections.includes(userIdtocheck);
+    const connectionsent = user.sentconnection.includes(userIdtocheck);
     if(isconnected){
       res.json({isconnected});
-    } else {
+    }
+    else if(connectionsent){
+      res.json({connectionsent});
+    }
+    else {
        res.json({isnotconnected});
     }
   } catch (error) {
