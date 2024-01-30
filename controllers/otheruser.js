@@ -31,7 +31,7 @@ const uploads = multer({ storage, fileFilter });
 
 router.use(authMiddleware);
 
-router.get('/fetch-user', async (req, res) => {
+router.get('/fetch-user/:otheruserId', async (req, res) => {
   try {
     const userId = req.userId; 
     const user = await User.findById(userId);
@@ -46,7 +46,7 @@ router.get('/fetch-user', async (req, res) => {
   }
 });
 
-router.get("/profile/posts", async (req, res) => {
+router.get("/posts/:otheruserId", async (req, res) => {
   try {
     const userId = req.userId;
     const user = await User.findById(userId);
@@ -64,7 +64,7 @@ router.get("/profile/posts", async (req, res) => {
   }
 });
 
-router.get('/fetch-user-connections', async (req, res) => {
+router.get('/fetch-user-connections/:otheruserId', async (req, res) => {
   try {
     const userId = req.userId; 
     const userProfile = await User.findById(userId)
