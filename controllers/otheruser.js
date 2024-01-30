@@ -31,6 +31,31 @@ const uploads = multer({ storage, fileFilter });
 
 router.use(authMiddleware);
 
+router.get('/check-connection/:otheruserId', async (req, res) => {
+  try {
+    const userId = req.userId;
+    const userIdtocheck = req.params.otheruserId;      
+    const user = await User.findById(userId);
+    const usertocheck = await User.findById(userIdtocheck);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    if (!usertocheck ) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const isconnected = user.connections.includes(userIdtocheck);
+    if(isconnected){
+      res.json({isconnected);
+    } else {
+       res.json({isnotconnected);
+    }
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 router.get('/fetch-user/:otheruserId', async (req, res) => {
   try {
     const userId = req.params.otheruserId;      
