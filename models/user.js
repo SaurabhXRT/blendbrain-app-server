@@ -6,12 +6,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     
   },
+  profileImage: { 
+    type: String,
+  },
   mobileNumber: {
     type: String,
     required: true,
   
   },
-   name: {
+  name: {
     type: String,
   },
   college: {
