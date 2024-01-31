@@ -268,7 +268,7 @@ router.put('/updateprofile',uploads.single('profileImage'), async (req, res) => 
     }
     const existingusername = await User.find({username: req.body.username });
     if(existingusername){
-      res.json({errorusername});
+      res.json({existingusername});
     }
     console.log(user);
     user.name = req.body.name || user.name;
