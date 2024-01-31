@@ -207,7 +207,7 @@ router.get('/comments/:postId', async (req, res) => {
 
     const post = await Post.findById(postId).populate({
       path: 'comments.createdBy',
-      select: 'name profileImage',
+      select: 'username profileImage',
     });
 
     if (!post) {
