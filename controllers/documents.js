@@ -23,11 +23,12 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = multer({ storage, fileFilter });
 
+const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
 
 const { google } = require('googleapis');
 const drive = google.drive('v3');
 const auth = new google.auth.GoogleAuth({
-  keyFile: './key.json',
+  keyFile: googleDriveKeyPath,
   scopes: ['https://www.googleapis.com/auth/drive'],
 });
 
