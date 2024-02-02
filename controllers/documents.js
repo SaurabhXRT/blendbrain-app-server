@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth');
 const fs = require('fs');
+const path = require('path');
 //const User = require('../models/user');
 //const Post = require('../models/userpost');
 const File = require("../models/upload");
@@ -23,12 +24,16 @@ const fileFilter = (req, file, cb) => {
   }
 };
 const upload = multer({ storage, fileFilter });
+const jsonFilePath = path.join(__dirname, '/key.json');
+
+// Read the JSON file
+const googleDriveKey = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 //const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
 const { google } = require('googleapis');
 const drive = google.drive('v3');
 const auth = new google.auth.GoogleAuth({
-  keyFile: "/key.json",
+  keyFile: googleDriveKey,
   scopes: ['https://www.googleapis.com/auth/drive'],
 });
 
