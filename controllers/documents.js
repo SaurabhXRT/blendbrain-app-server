@@ -25,7 +25,8 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 
 const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
-const googleDriveKey = fs.readFileSync(googleDriveKeyPath, 'utf8');
+const googleDriveKey = fs.promises.readFile(googleDriveKeyPath, 'utf8');
+
 
 const { google } = require('googleapis');
 const drive = google.drive('v3');
