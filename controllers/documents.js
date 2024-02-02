@@ -7,6 +7,7 @@ const path = require('path');
 //const Post = require('../models/userpost');
 const File = require("../models/upload");
 const app = express();
+const streamifier = require('streamifier');
 
 const cors = require('cors');
 app.use(cors());
@@ -55,12 +56,12 @@ const driveClient = async () => {
 //   scopes: ['https://www.googleapis.com/auth/drive'],
 // });
 
-const streamifier = require('streamifier');
-const driveClient = async () => {
-  const authClient = await auth.getClient();
-  google.options({ auth: authClient });
-  return drive;
-};
+
+// const driveClient = async () => {
+//   const authClient = await auth.getClient();
+//   google.options({ auth: authClient });
+//   return drive;
+// };
 
 router.use(authMiddleware);
 router.post('/upload', upload.single('file'), async (req, res) => {
