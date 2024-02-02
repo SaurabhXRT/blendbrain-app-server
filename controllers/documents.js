@@ -9,7 +9,6 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-router.use(authMiddleware);
 
 
 const multer = require('multer');
@@ -39,7 +38,7 @@ const driveClient = async () => {
   google.options({ auth: authClient });
   return drive;
 };
-
+router.use(authMiddleware);
 router.post('/upload', upload.single('file'), async (req, res) => {
   const { subjectName } = req.body;
   const { originalname, mimetype, buffer } = req.file;

@@ -5,6 +5,7 @@ const SecretKey = "2809a95eedde5863d8e8e3bea5205cd62d290b10a3769afee677b8754a4d0
 
 const authMiddleware = async (req, res, next) => {
     try {
+        console.log(req.header('Authorization'));
         const token = req.header('Authorization').replace('Bearer ', '');
         if (!token) {
             throw new Error('No token provided');
