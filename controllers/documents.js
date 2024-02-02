@@ -24,7 +24,6 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 
 
-
 const { google } = require('googleapis');
 const drive = google.drive('v3');
 const auth = new google.auth.GoogleAuth({
@@ -38,6 +37,7 @@ const driveClient = async () => {
   google.options({ auth: authClient });
   return drive;
 };
+
 router.use(authMiddleware);
 router.post('/upload', upload.single('file'), async (req, res) => {
   const { subjectName } = req.body;
