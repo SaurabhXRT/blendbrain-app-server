@@ -9,6 +9,10 @@ const fileSchema = new mongoose.Schema({
     type: String, 
     required: true,
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
   pdf: {
     type: String, 
     required: true,

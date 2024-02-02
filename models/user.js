@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  files: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "File",
+    },
+  ],
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,

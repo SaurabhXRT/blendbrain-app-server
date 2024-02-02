@@ -35,6 +35,9 @@ app.use('/auth', authRoutes);
 const otheruserRoutes = require('./controllers/otheruser');
 app.use('/otheruser', otheruserRoutes);
 
+const documentRoutes = require('./controllers/documents');
+app.use('/document', documentRoutes);
+
 const port = 3000;
 app.listen(port, () => {
     console.log(`app is running at port number ${port}`);
