@@ -29,13 +29,31 @@ const jsonFilePath = path.join(__dirname, '/key.json');
 // Read the JSON file
 const googleDriveKey = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
-//const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
 const { google } = require('googleapis');
-const drive = google.drive('v3');
-const auth = new google.auth.GoogleAuth({
-  keyFile: googleDriveKey,
-  scopes: ['https://www.googleapis.com/auth/drive'],
-});
+
+const driveClient = async () => {
+  try {
+    const auth = await google.auth.getClient({
+      keyFile: googleDriveKey,
+      scopes: ['https://www.googleapis.com/auth/drive'],
+    });
+
+    google.options({ auth });
+    return google.drive('v3');
+  } catch (error) {
+    console.error('Error creating Google Drive client:', error);
+    throw error;
+  }
+};
+
+
+//const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
+// const { google } = require('googleapis');
+// const drive = google.drive('v3');
+// const auth = new google.auth.GoogleAuth({
+//   keyFile: googleDriveKey,
+//   scopes: ['https://www.googleapis.com/auth/drive'],
+// });
 
 const streamifier = require('streamifier');
 const driveClient = async () => {
