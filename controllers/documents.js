@@ -5,20 +5,35 @@ const authMiddleware = require('../middleware/auth');
 //const Post = require('../models/userpost');
 const File = require("../models/upload");
 const app = express();
+
 const cors = require('cors');
 app.use(cors());
+
+router.use(authMiddleware);
+
+
 const multer = require('multer');
+const storage = multer.diskStorage({});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('application/pdf')) {
+    cb(null, true);
+  } else {
+    cb('invalid image file!', false);
+  }
+};
+const upload = multer({ storage, fileFilter });
+
+
+
 const { google } = require('googleapis');
 const drive = google.drive('v3');
 const auth = new google.auth.GoogleAuth({
   keyFile: './drivekey.json',
   scopes: ['https://www.googleapis.com/auth/drive'],
 });
+
 const streamifier = require('streamifier');
-
-const upload = multer();
-router.use(authMiddleware);
-
 const driveClient = async () => {
   const authClient = await auth.getClient();
   google.options({ auth: authClient });
