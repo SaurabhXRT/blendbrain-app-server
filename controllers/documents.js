@@ -9,7 +9,6 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-router.use(authMiddleware);
 
 
 const multer = require('multer');
