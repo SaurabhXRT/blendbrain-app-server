@@ -89,4 +89,24 @@ router.post('/incrementViews', async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+
+router.delete('/:documentId', async (req, res) => {
+  const { documentId } = req.params;
+  const userId = req.userId;
+
+  try {
+    const document = await File.findOne({ _id: documentId, uploadedBy: userId });
+
+    if (!document) {
+      return res.status(404).json({ success: false, message: 'Document not found or unauthorized' });
+    }
+    await User.findByIdAndUpdate(userId, { $pull: { files: documentId } });
+    await File.findByIdAndRemove(documentId);
+    res.json({ success: true, message: 'Document deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting document:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
