@@ -29,7 +29,7 @@ const auth = new google.auth.GoogleAuth({
   scopes: ['https://www.googleapis.com/auth/drive'],
 });
 
-const streamifier = require('streamifier');
+
 const driveClient = async () => {
   const authClient = await auth.getClient();
   google.options({ auth: authClient });
