@@ -35,51 +35,42 @@ router.use(authMiddleware);
 
 router.post('/upload', async (req, res) => {
   const { subjectName, file } = req.body;
-  //const { originalname, mimetype, buffer } = req.file;
   const userId = req.userId;
 
   try {
-  //   const fileMetadata = {
-  //     name: originalname,
-  //   };
-
-  //   const media = {
-  //     mimeType: mimetype,
-  //     body: streamifier.createReadStream(buffer),
-  //   };
-
-  //   const driveInstance = await driveClient(auth); // Pass auth as an argument
-
-  //   const response = await driveInstance.files.create({
-  //     resource: fileMetadata,
-  //     media,
-  //     fields: 'webViewLink, id',
-  //   });
-
-  //   const fileId = response.data.id;
-
-  //   await driveInstance.permissions.create({
-  //     fileId,
-  //     requestBody: {
-  //       role: 'reader',
-  //       type: 'anyone',
-  //     },
-  //   });
-
     const fileModel = new File({
       subjectname: subjectName,
-      //filename: originalname,
       pdf: file,
       uploadedBy: userId,
     });
 
-    await fileModel.save();
+    const savedFile = await fileModel.save();
+    await User.findByIdAndUpdate(userId, { $push: { files: savedFile._id } });
 
-    res.json({ success: true, fileModel });
+    res.json({ success: true, fileModel: savedFile });
   } catch (error) {
-    console.error('Error uploading to Google Drive:', error);
+    console.error('Error uploading file:', error);
     res.status(500).json({ success: false });
   }
 });
+
+router.get('/documents', async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const userWithFiles = await User.findById(userId).populate('files');
+    
+    if (!userWithFiles) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.json({ success: true, documents: userWithFiles.files });
+  } catch (error) {
+    console.error('Error fetching documents:', error);
+    res.status(500).json({ success: false });
+  }
+});
+
+module.exports = router;
 
 module.exports = router;
