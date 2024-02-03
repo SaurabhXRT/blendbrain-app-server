@@ -11,33 +11,26 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-
-const multer = require('multer');
-const storage = multer.diskStorage({});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('application/pdf')) {
-    cb(null, true);
-  } else {
-    cb('invalid image file!', false);
-  }
-};
-const upload = multer({ storage, fileFilter });
-const jsonFilePath = path.join(__dirname, '/key.json');
+const jsonFilePath = path.join(__dirname, 'key.json');
 
 // Read the JSON file
 const googleDriveKey = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 //const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
-const { google } = require('googleapis');
-const drive = google.drive('v3');
+const { google } = require("googleapis");
+
+
+const drive = google.drive("v3");
+
 const auth = new google.auth.GoogleAuth({
   keyFile: googleDriveKey,
-  scopes: ['https://www.googleapis.com/auth/drive'],
+  scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
-const streamifier = require('streamifier');
 const driveClient = async () => {
   const authClient = await auth.getClient();
   google.options({ auth: authClient });
