@@ -129,4 +129,19 @@ router.get('/search', async (req, res) => {
   }
 });
 
+router.get('/top-views', async (req, res) => {
+  try {
+    const topDocuments = await File.find({})
+      .sort({ views: -1 }) // Sort in descending order based on views
+      .limit(5) // Limit to the top 5 documents
+      .populate('uploadedBy', 'username')
+      .exec();
+
+    res.json({ success: true, topDocuments });
+  } catch (error) {
+    console.error('Error fetching top documents:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
