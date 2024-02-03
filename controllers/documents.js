@@ -38,7 +38,7 @@ router.post('/upload', async (req, res) => {
   //const { originalname, mimetype, buffer } = req.file;
   const userId = req.userId;
 
-  // try {
+  try {
   //   const fileMetadata = {
   //     name: originalname,
   //   };
