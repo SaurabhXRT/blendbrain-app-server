@@ -73,7 +73,7 @@ router.get('/documents', async (req, res) => {
 });
 
 // Add a new route in your server
-router.post('/document/incrementViews', async (req, res) => {
+router.post('/incrementViews', async (req, res) => {
   const { documentId } = req.body;
   
   try {
