@@ -3,6 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/auth');
 const fs = require('fs');
 const path = require('path');
+const User = require("../models/user");
 const File = require("../models/upload");
 const app = express();
 const streamifier = require('streamifier');
