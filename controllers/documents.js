@@ -95,13 +95,14 @@ router.delete('/:documentId', async (req, res) => {
   const userId = req.userId;
 
   try {
-    const document = await File.findOne({ _id: documentId, uploadedBy: userId });
+    const document = await File.findOne({ _id: documentId });
 
     if (!document) {
       return res.status(404).json({ success: false, message: 'Document not found or unauthorized' });
     }
-    await User.findByIdAndUpdate(userId, { $pull: { files: documentId } });
-    await File.findByIdAndRemove(documentId);
+    // await User.findByIdAndUpdate(userId, { $pull: { files: documentId } });
+    // await File.findByIdAndRemove(documentId);
+    await document.deleteOne();
     res.json({ success: true, message: 'Document deleted successfully' });
   } catch (error) {
     console.error('Error deleting document:', error);
