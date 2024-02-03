@@ -20,7 +20,7 @@ const googleDriveKey = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 const { google } = require('googleapis');
 const drive = google.drive('v3');
 
-const driveClient = async () => {
+const driveClient = async (auth) => {
   try {
     const authClient = await auth.getClient();
     google.options({ auth: authClient });
@@ -48,7 +48,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       body: streamifier.createReadStream(buffer),
     };
 
-    const driveInstance = await driveClient();
+    const driveInstance = await driveClient(auth); // Pass auth as an argument
 
     const response = await driveInstance.files.create({
       resource: fileMetadata,
