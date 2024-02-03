@@ -7,6 +7,7 @@ const path = require('path');
 //const Post = require('../models/userpost');
 const File = require("../models/upload");
 const app = express();
+const streamifier = require('streamifier');
 
 const cors = require('cors');
 app.use(cors());
@@ -21,16 +22,14 @@ const jsonFilePath = path.join(__dirname, 'key.json');
 const googleDriveKey = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 //const googleDriveKeyPath = process.env.GOOGLE_DRIVE_KEY_PATH;
-const { google } = require("googleapis");
-
-
-const drive = google.drive("v3");
-
+const { google } = require('googleapis');
+const drive = google.drive('v3');
 const auth = new google.auth.GoogleAuth({
   keyFile: googleDriveKey,
-  scopes: ["https://www.googleapis.com/auth/drive"],
+  scopes: ['https://www.googleapis.com/auth/drive'],
 });
 
+const streamifier = require('streamifier');
 const driveClient = async () => {
   const authClient = await auth.getClient();
   google.options({ auth: authClient });
