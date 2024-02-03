@@ -110,4 +110,23 @@ router.delete('/:documentId', async (req, res) => {
   }
 });
 
+router.get('/search', async (req, res) => {
+  const { subjectName } = req.query;
+
+  try {
+    const documents = await File.find({ subjectname: { $regex: new RegExp(subjectName, 'i') } })
+      .populate('uploadedBy', 'username')
+      .exec();
+
+    if (documents.length > 0) {
+      res.json({ success: true, documents });
+    } else {
+      res.json({ success: false, message: 'No documents found with the given subject name.' });
+    }
+  } catch (error) {
+    console.error('Error searching documents:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
