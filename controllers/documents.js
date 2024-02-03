@@ -72,6 +72,21 @@ router.get('/documents', async (req, res) => {
   }
 });
 
-module.exports = router;
-
+// Add a new route in your server
+router.post('/document/incrementViews', async (req, res) => {
+  const { documentId } = req.body;
+  
+  try {
+    const document = await File.findByIdAndUpdate(documentId, { $inc: { views: 1 } });
+    
+    if (!document) {
+      return res.status(404).json({ success: false, message: 'Document not found' });
+    }
+    
+    res.json({ success: true, document });
+  } catch (error) {
+    console.error('Error incrementing views:', error);
+    res.status(500).json({ success: false });
+  }
+});
 module.exports = router;
