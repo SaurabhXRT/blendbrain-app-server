@@ -109,7 +109,7 @@ router.get('/fetch-user-connections/:otheruserId', async (req, res) => {
   }
 });
 
-app.get('/search', async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     const { username } = req.query;
     const users = await User.find({
