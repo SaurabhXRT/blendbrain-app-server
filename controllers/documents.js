@@ -144,4 +144,34 @@ router.get('/top-views', async (req, res) => {
   }
 });
 
+router.get('/leaderboard', async (req, res) => {
+  try {
+    const leaderboard = await User.aggregate([
+      {
+        $lookup: {
+          from: 'files',
+          localField: 'files',
+          foreignField: '_id',
+          as: 'uploadedFiles',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          profileImage: 1,
+          totalViews: { $sum: '$uploadedFiles.views' },
+        },
+      },
+      { $sort: { totalViews: -1 } },
+      { $limit: 5 },
+    ]);
+
+    res.json({ success: true, leaderboard });
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
