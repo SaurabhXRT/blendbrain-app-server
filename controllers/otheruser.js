@@ -109,5 +109,17 @@ router.get('/fetch-user-connections/:otheruserId', async (req, res) => {
   }
 });
 
+app.get('/search', async (req, res) => {
+  try {
+    const { username } = req.query;
+    const users = await User.find({
+      username: { $regex: new RegExp(username, 'i') },
+    }).select('username profileImage');
+    res.json(users);
+  } catch (error) {
+    console.error('Error searching users:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;
