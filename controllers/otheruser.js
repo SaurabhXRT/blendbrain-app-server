@@ -112,7 +112,9 @@ router.get('/fetch-user-connections/:otheruserId', async (req, res) => {
 router.get('/search', async (req, res) => {
   try {
     const { username } = req.query;
+    const currentUserId = req.userId; 
     const users = await User.find({
+      _id: { $ne: currentUserId }, 
       username: { $regex: new RegExp(username, 'i') },
     }).select('username profileImage');
     res.json(users);
