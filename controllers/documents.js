@@ -177,14 +177,20 @@ router.get('/leaderboard', async (req, res) => {
 
 router.get('/totalcoins', async (req, res) => {
   try {
-    const { userId } = req.user; // Assuming userId is available in the request (e.g., from authentication middleware)
+    const userId = req.userId; 
 
-    const user = await User.findById(userId).populate('files');
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
 
-    const totalCoins = user.files.reduce((total, file) => total + file.views, 0);
+    let totalCoins = 0;
+    for (const file of user.files) {
+      const fileDoc = await File.findById(file);
+      if (fileDoc) {
+        totalCoins += fileDoc.views;
+      }
+    }
 
     res.json({ success: true, totalCoins });
   } catch (error) {
