@@ -177,7 +177,7 @@ router.get('/leaderboard', async (req, res) => {
 
 router.get('/totalcoins', async (req, res) => {
   try {
-    const userId = req.userId;
+    const { userId } = req.userId; // Assuming userId is available in the request (e.g., from authentication middleware)
 
     const userTotalViews = await User.aggregate([
       {
@@ -218,7 +218,5 @@ router.get('/totalcoins', async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
-
-
 
 module.exports = router;
