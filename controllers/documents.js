@@ -177,40 +177,14 @@ router.get('/leaderboard', async (req, res) => {
 
 router.get('/totalcoins', async (req, res) => {
   try {
-    const { userId } = req.user;
+    const { userId } = req.user; // Assuming userId is available in the request (e.g., from authentication middleware)
 
-    const userTotalViews = await User.aggregate([
-      {
-        $match: {
-          _id: mongoose.Types.ObjectId(userId),
-        },
-      },
-      {
-        $lookup: {
-          from: 'files',
-          localField: 'files',
-          foreignField: '_id',
-          as: 'uploadedFiles',
-        },
-      },
-      {
-        $unwind: '$uploadedFiles',
-      },
-      {
-        $group: {
-          _id: null,
-          totalCoins: { $sum: '$uploadedFiles.views' },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          totalCoins: 1,
-        },
-      },
-    ]);
+    const user = await User.findById(userId).populate('files');
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
 
-    const totalCoins = userTotalViews.length > 0 ? userTotalViews[0].totalCoins : 0;
+    const totalCoins = user.files.reduce((total, file) => total + file.views, 0);
 
     res.json({ success: true, totalCoins });
   } catch (error) {
@@ -218,5 +192,4 @@ router.get('/totalcoins', async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
-
 module.exports = router;
