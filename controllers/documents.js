@@ -7,6 +7,7 @@ const User = require("../models/user");
 const File = require("../models/upload");
 const app = express();
 const streamifier = require('streamifier');
+const mongoose = require('mongoose');
 
 const cors = require('cors');
 app.use(cors());
@@ -176,12 +177,12 @@ router.get('/leaderboard', async (req, res) => {
 
 router.get('/totalcoins', async (req, res) => {
   try {
-    const  userId = req.userId; 
+    const userId = req.userId;
 
     const userTotalViews = await User.aggregate([
       {
         $match: {
-          _id:  userId ,
+          _id: mongoose.Types.ObjectId(userId),
         },
       },
       {
@@ -210,7 +211,7 @@ router.get('/totalcoins', async (req, res) => {
     ]);
 
     const totalCoins = userTotalViews.length > 0 ? userTotalViews[0].totalCoins : 0;
-console.log(totalCoins);
+
     res.json({ success: true, totalCoins });
   } catch (error) {
     console.error('Error fetching total coins:', error);
