@@ -176,12 +176,12 @@ router.get('/leaderboard', async (req, res) => {
 
 router.get('/totalcoins', async (req, res) => {
   try {
-    const { userId } = req.userId; 
+    const  userId = req.userId; 
 
     const userTotalViews = await User.aggregate([
       {
         $match: {
-          _id: mongoose.Types.ObjectId(userId),
+          _id:  userId ,
         },
       },
       {
