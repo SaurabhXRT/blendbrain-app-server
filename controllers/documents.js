@@ -177,7 +177,7 @@ router.get('/leaderboard', async (req, res) => {
 
 router.get('/totalcoins', async (req, res) => {
   try {
-    const { userId } = req.userId; // Assuming userId is available in the request (e.g., from authentication middleware)
+    const { userId } = req.user;
 
     const userTotalViews = await User.aggregate([
       {
