@@ -210,7 +210,7 @@ router.get('/totalcoins', async (req, res) => {
     ]);
 
     const totalCoins = userTotalViews.length > 0 ? userTotalViews[0].totalCoins : 0;
-
+console.log(totalCoins);
     res.json({ success: true, totalCoins });
   } catch (error) {
     console.error('Error fetching total coins:', error);
