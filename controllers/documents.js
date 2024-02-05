@@ -174,4 +174,23 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
+router.get('/totalcoins', async (req, res) => {
+  try {
+    const { userId } = req.userId; 
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    const totalCoins = user.files.reduce((total, file) => total + file.views, 0);
+
+    res.json({ success: true, totalCoins });
+  } catch (error) {
+    console.error('Error fetching total coins:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+
 module.exports = router;
