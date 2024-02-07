@@ -46,34 +46,6 @@ router.get('/fetch-user', async (req, res) => {
   }
 });
 
-// router.get('/fetch-non-connected-user', async (req, res) => {
-//   try {
-//     const userId = req.userId; 
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       return res.status(404).json({ error: 'User not found' });
-//     }
-//      const connectedUsers = user.connections;
-//      const excludedUserIds = connectedUsers.concat(
-//       user._id,
-//       user.pendingConnections,
-//       user.sentConnections
-//     );
-
-//      const nonConnectedUsers = await User.find({
-//       _id: {
-//         $nin: excludedUserIds,
-//       }
-//     }).sort({ createdAt: -1 });
-//     console.log(nonConnectedUsers);
-//     res.json(nonConnectedUsers);
-//   } catch (error) {
-//     console.error('Error fetching user profile:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
 router.get('/fetch-non-connected-user', async (req, res) => {
   try {
     const userId = req.userId; 
