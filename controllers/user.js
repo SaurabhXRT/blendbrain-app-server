@@ -90,17 +90,10 @@ router.get('/fetch-non-connected-user', async (req, res) => {
       user.sentConnections
     );
 
-    const pageNumber = req.query.page || 1; // Default page number is 1
-    const perPage = 5; // Number of users per page
-
-    const nonConnectedUsers = await User.find({
-      _id: {
-        $nin: excludedUserIds,
-      }
-    })
-    .sort({ createdAt: -1 })
-    .skip((pageNumber - 1) * perPage) // Skip users based on page number
-    .limit(perPage); // Limit the number of users per page
+    const nonConnectedUsers = await User.aggregate([
+      { $match: { _id: { $nin: excludedUserIds } } },
+      { $sample: { size: 5 } } // Select 10 random users
+    ]);
 
     res.json(nonConnectedUsers);
   } catch (error) {
@@ -108,6 +101,7 @@ router.get('/fetch-non-connected-user', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 router.post('/posts',uploads.single('image'), async (req, res) => {
