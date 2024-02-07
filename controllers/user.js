@@ -201,6 +201,35 @@ router.post('/like/:postId', async (req, res) => {
   }
 });
 
+// router.get('/comments/:postId', async (req, res) => {
+//   try {
+//     const postId = req.params.postId;
+
+//     const post = await Post.findById(postId).populate({
+//       path: 'comments.createdBy',
+//       select: 'username profileImage',
+//     });
+
+//     if (!post) {
+//       return res.status(404).json({ error: 'Post not found' });
+//     }
+
+//     const comments = post.comments.map((comment) => ({
+//       text: comment.text,
+//       createdBy: {
+//         username: comment.createdBy.username,
+//         profileImage: comment.createdBy.profileImage,
+//       },
+//       createdAt: comment.createdAt,
+//     }));
+
+//     res.json(comments);
+//   } catch (error) {
+//     console.error('Error fetching comments:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
 router.get('/comments/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
@@ -213,7 +242,7 @@ router.get('/comments/:postId', async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-
+    post.comments.sort((a, b) => b.createdAt - a.createdAt);
     const comments = post.comments.map((comment) => ({
       text: comment.text,
       createdBy: {
@@ -229,6 +258,7 @@ router.get('/comments/:postId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 router.post("/connect/:userId", async (req, res) => {
   try {
