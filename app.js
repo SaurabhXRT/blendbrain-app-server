@@ -53,6 +53,9 @@ io.on('connection', (socket) => {
 app.get("/", (req,res) => {
     res.send("server is working");
 });
+const chatRoutes = require('./controllers/message');
+app.use('/chat', chatRoutes);
+
 const userRoutes = require('./controllers/user');
 app.use('/user', userRoutes);
 
