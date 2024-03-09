@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const http = require("http");
+const { createServer } = require('node:http');
 const app = express();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -28,7 +28,7 @@ db();
 app.get("/", (req,res) => {
     res.send("server is working");
 });
-const server = http.createServer(app);
+const server = createServer(app);
 initSocket(server);
 
 const userRoutes = require('./controllers/user');
