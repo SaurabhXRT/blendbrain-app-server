@@ -1,6 +1,5 @@
-// controllers/message.js
 const socketIo = require("socket.io");
-const Message = require("../models/message"); // Assuming you have a Message model already defined
+const Message = require("../models/message"); 
 
 let io;
 
