@@ -1,9 +1,8 @@
-const socketIo = require("socket.io");
+const { Server } = require('socket.io');
 const Message = require("../models/message"); 
 
-let io;
 const initSocket = (server) => {
-  io = socketIo(server);
+  const io = new Server(server);
   io.on("connection", (socket) => {
     console.log("User connected");
 
@@ -17,7 +16,7 @@ const initSocket = (server) => {
         await message.save();
         io.to(receiver).emit("message", message);
       } catch (error) {
-        console.error("Error saving message:", error);
+        console.error("Error saving message:", error.message);
       }
     });
 
