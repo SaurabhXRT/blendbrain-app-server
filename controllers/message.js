@@ -3,6 +3,7 @@ const Message = require("../models/message");
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth');
+const User = require("../models/user");
 const app = express();
 const cors = require('cors');
 app.use(cors());
