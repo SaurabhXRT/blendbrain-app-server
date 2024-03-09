@@ -30,7 +30,12 @@ router.get('/messages/:otheruserId', async (req, res) => {
     try {
         const userId = req.userId;
         const otheruserId = req.params.otheruserId;
-        const messages = await Message.find({ $or: [{ sender: userId , receiver: otheruserId }] });
+        const messages = await Message.find({
+            $or: [
+                { sender: userId, receiver: otheruserId },
+                { sender: otheruserId, receiver: userId }
+            ]
+        });
         res.json(messages);
     } catch (error) {
         console.error('Error fetching messages:', error);
