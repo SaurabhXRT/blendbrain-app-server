@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const User = require('./models/user');
+const { initSocket } = require('./controllers/message');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -26,6 +27,9 @@ db();
 app.get("/", (req,res) => {
     res.send("server is working");
 });
+const server = http.createServer(app);
+initSocket(server);
+
 const userRoutes = require('./controllers/user');
 app.use('/user', userRoutes);
 
