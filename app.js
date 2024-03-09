@@ -1,11 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { createServer } = require('node:http');
+const { Server } = require('socket.io');
 const app = express();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const User = require('./models/user');
-const { initSocket } = require('./controllers/message');
+const Message = require("./models/message"); 
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -25,12 +28,31 @@ const db = async () => {
     }
 }
 db();
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+    socket.on("sendMessage", async ({ sender, receiver, text }) => {
+      try {
+        const message = new Message({
+          sender: sender,
+          receiver: receiver,
+          content: text
+        });
+        await message.save();
+        io.to(receiver).emit("message", message);
+      } catch (error) {
+        console.error("Error saving message:", error.message);
+      }
+    });
+
+    socket.on("disconnect", () => {
+      console.log("User disconnected");
+    });
+});
+
 app.get("/", (req,res) => {
     res.send("server is working");
 });
-const server = createServer(app);
-initSocket(server);
-
 const userRoutes = require('./controllers/user');
 app.use('/user', userRoutes);
 
