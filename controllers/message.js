@@ -2,8 +2,6 @@ const socketIo = require("socket.io");
 const Message = require("../models/message"); 
 
 let io;
-
-// Initialize WebSocket server
 const initSocket = (server) => {
   io = socketIo(server);
   io.on("connection", (socket) => {
