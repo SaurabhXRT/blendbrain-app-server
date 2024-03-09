@@ -72,7 +72,7 @@ router.get('/fetch-latest-messages', async (req, res) => {
         profileimage: connection.profileImage,
         username: connection.username,
         latestMessage: latestMessage ? latestMessage.content : null,
-        timeAgo: latestMessage ? calculateTimeAgo(latestMessage.createdAt) : null
+        timeAgo: latestMessage ? latestMessage.createdAt : null
       });
     }
 
