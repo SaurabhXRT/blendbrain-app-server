@@ -43,6 +43,44 @@ router.get('/messages/:otheruserId', async (req, res) => {
     }
 });
 
+// Example endpoint to fetch latest message for each connection's user
+router.get('/fetch-latest-messages', async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+
+    //const connections = await UserConnection.find({ user: user._id });
+    const connectedUsers = user.connections;
+    const latestMessages = [];
+    for (const connection of connectedUsers) {
+      const latestMessage = await Message.findOne({ 
+        $or: [
+          { sender: user._id, receiver: connection._id },
+          { sender: connection._id, receiver: user._id }
+        ]
+      })
+        .sort({ createdAt: -1 })
+        .limit(1);
+
+      latestMessages.push({ 
+        userId: connection._id, 
+        latestMessage: latestMessage ? latestMessage.content : null,
+        timeAgo: latestMessage ? calculateTimeAgo(latestMessage.createdAt) : null
+      });
+    }
+
+    res.send(latestMessages);
+  } catch (error) {
+    console.error('Error fetching latest messages:', error);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 const initSocket = (server) => {
   const io = new Server(server);
