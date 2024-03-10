@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 const db = async () => {
     const uri =
-        "mongodb+srv://saurabhkumar:rVKACHYbuzYy7VMs@cluster0.n4zogin.mongodb.net/brainbulbreactnative?retryWrites=true&w=majority";
+        "mongodb+srv://saurabhbabu287:S7AvEYTDEf3YgZXk@cluster0.o4fudm6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
     try {
         mongoose.set("strictQuery", false);
         mongoose.connect(uri);
