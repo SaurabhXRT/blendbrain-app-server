@@ -13,8 +13,7 @@ const io = new Server(server);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 const db = async () => {
-    const uri =
-        "mongodb+srv://saurabhbabu287:S7AvEYTDEf3YgZXk@cluster0.o4fudm6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    const uri = process.env.MONGODB_URI;
     try {
         mongoose.set("strictQuery", false);
         mongoose.connect(uri);
